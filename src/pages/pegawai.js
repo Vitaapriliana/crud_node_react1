@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from 'axios'
+import NavBar from '../components/navbar'
 import {Button, Modal, Card, Table, Form} from 'react-bootstrap'
 
 class Pegawai extends React.Component {
@@ -14,6 +15,21 @@ class Pegawai extends React.Component {
             search: '',
             isModalOpen: false,
         }
+        if (localStorage.getItem("token")) {
+            this.state.token = localStorage.getItem("token")
+          } else {
+            window.location = "/login"
+          }
+  
+          this.headerConfig.bind(this)
+      }
+  
+      headerConfig = () => {
+        let header = {
+          headers: { Authorization: `Bearer ${this.state.token}` }
+        }
+        return header
+        
     }
     bind = (event) => {
         this.setState({[event.target.name]: event.target.value});
@@ -36,10 +52,15 @@ class Pegawai extends React.Component {
             isModalOpen: true
         })
     }
+    handleClose = (item) => {
+        this.setState({
+            isModalOpen: false
+        })
+    }
     getPegawai = () => {
         let url = "http://localhost:2000/pegawai";
         // mengakses api untuk mengambil data pegawai
-        axios.get(url)
+        axios.get(url, this.headerConfig())
         .then(response => {
           // mengisikan data dari respon API ke array pegawai
           this.setState({pegawai: response.data.pegawai});
@@ -57,7 +78,7 @@ class Pegawai extends React.Component {
           }
           // mengakses api untuk mengambil data pegawai
           // berdasarkan keyword
-          axios.post(url, form)
+          axios.post(url, form, this.headerConfig())
           .then(response => {
             // mengisikan data dari respon API ke array pegawai
             this.setState({pegawai: response.data.pegawai});
@@ -66,6 +87,10 @@ class Pegawai extends React.Component {
             console.log(error);
           });
         }
+    }
+    componentDidMount(){
+        // method yang pertama kali dipanggil pada saat load page
+        this.getPegawai()
     }
     handleSave = (event) => {
         event.preventDefault();
@@ -85,7 +110,7 @@ class Pegawai extends React.Component {
         }
     
         // mengirim data ke API untuk disimpan pada database
-        axios.post(url, form)
+        axios.post(url, form, this.headerConfig())
         .then(response => {
           // jika proses simpan berhasil, memanggil data yang terbaru
           this.getPegawai();
@@ -102,7 +127,7 @@ class Pegawai extends React.Component {
         let url = "http://localhost:2000/pegawai/" + id_pegawai;
         // memanggil url API untuk menghapus data pada database
         if (window.confirm('Apakah Anda yakin ingin menghapus data ini?')) {
-          axios.delete(url)
+          axios.delete(url, this.headerConfig())
           .then(response => {
             // jika proses hapus data berhasil, memanggil data yang terbaru
             this.getPegawai();
@@ -119,6 +144,7 @@ class Pegawai extends React.Component {
     render(){
         return(
             <>
+                <NavBar />
                 <Card>
                 <Card.Header className="card-header bg-info text-white" align={'center'}>Data Pegawai</Card.Header>
                 <Card.Body>
@@ -183,7 +209,7 @@ class Pegawai extends React.Component {
                     </Form>
                 </Modal>
             </>
-        )
+        );
     }
 }
 
