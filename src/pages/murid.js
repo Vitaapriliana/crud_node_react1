@@ -3,14 +3,17 @@ import axios from 'axios'
 import NavBar from '../components/navbar'
 import {Button, Modal, Card, Table, Form} from 'react-bootstrap'
 
-class Pegawai extends React.Component {
+class Murid extends React.Component {
     constructor(){
         super();
         this.state = {
-            pegawai: [],
-            id_pegawai: "",  
-            nama_pegawai: "",  
-            alamat: "",  
+            murid: [],
+            id_murid: "",  
+            nis_murid: "",  
+            nama_murid: "",
+            kelas: "",
+            jurusan: "",
+            poin: "",  
             action: "", 
             search: '',
             isModalOpen: false,
@@ -36,18 +39,24 @@ class Pegawai extends React.Component {
     }
     handleAdd = () => {
         this.setState({
-            id_pegawai: "",
-            nama_pegawai: "",
-            alamat: "",
+            id_murid: "",  
+            nis_murid: "",  
+            nama_murid: "",
+            kelas: "",
+            jurusan: "",
+            poin: "",
             action: "insert",
             isModalOpen: true
         })
     }
     handleEdit = (item) => {
         this.setState({
-            id_pegawai: item.id_pegawai,
-            nama_pegawai: item.nama_pegawai,
-            alamat: item.alamat,
+            id_murid: item.id_murid,
+            nis_murid: item.nis_murid,
+            nama_murid: item.nama_murid,
+            kelas: item.kelas,
+            jurusan: item.jurusan,
+            poin: item.poin,
             action: "update",
             isModalOpen: true
         })
@@ -57,20 +66,20 @@ class Pegawai extends React.Component {
             isModalOpen: false
         })
     }
-    getPegawai = () => {
-        let url = "http://localhost:2000/pegawai";
+    getMurid = () => {
+        let url = "http://localhost:2000/murid";
         // mengakses api untuk mengambil data pegawai
         axios.get(url, this.headerConfig())
         .then(response => {
           // mengisikan data dari respon API ke array pegawai
-          this.setState({pegawai: response.data.pegawai});
+          this.setState({murid: response.data.murid});
         })
         .catch(error => {
           console.log(error);
         });
     }
-    findPegawai = (event) => {
-        let url = "http://localhost:2000/pegawai";
+    findMurid = (event) => {
+        let url = "http://localhost:2000/murid";
         if (event.keyCode === 13) {
         //   menampung data keyword pencarian
           let form = {
@@ -81,7 +90,7 @@ class Pegawai extends React.Component {
           axios.post(url, form, this.headerConfig())
           .then(response => {
             // mengisikan data dari respon API ke array pegawai
-            this.setState({pegawai: response.data.pegawai});
+            this.setState({murid: response.data.murid});
           })
           .catch(error => {
             console.log(error);
@@ -90,7 +99,7 @@ class Pegawai extends React.Component {
     }
     componentDidMount(){
         // method yang pertama kali dipanggil pada saat load page
-        this.getPegawai()
+        this.getMurid()
     }
     handleSave = (event) => {
         event.preventDefault();
@@ -98,22 +107,25 @@ class Pegawai extends React.Component {
         ke dalam FormData() untuk dikirim  */
         let url = "";
         if (this.state.action === "insert") {
-          url = "http://localhost:2000/pegawai/save"
+          url = "http://localhost:2000/murid/save"
         } else {
-          url = "http://localhost:2000/pegawai/update"
+          url = "http://localhost:2000/murid/update"
         }
     
         let form = {
-          id_pegawai: this.state.id_pegawai,
-          nama_pegawai: this.state.nama_pegawai,
-          alamat: this.state.alamat
+          id_murid: this.state.id_murid,
+          nis_murid: this.state.nis_murid,
+          nama_murid: this.state.nama_murid,
+          kelas: this.state.kelas,
+          jurusan: this.state.jurusan,
+          poin: this.state.poin
         }
     
         // mengirim data ke API untuk disimpan pada database
         axios.post(url, form, this.headerConfig())
         .then(response => {
           // jika proses simpan berhasil, memanggil data yang terbaru
-          this.getPegawai();
+          this.getMurid();
         })
         .catch(error => {
           console.log(error);
@@ -123,28 +135,30 @@ class Pegawai extends React.Component {
             isModalOpen: false
         })
     }
-    Drop = (id_pegawai) => {
-        let url = "http://localhost:2000/pegawai/" + id_pegawai;
+    Drop = (id_murid) => {
+        let url = "http://localhost:2000/murid/" + id_murid;
         // memanggil url API untuk menghapus data pada database
         if (window.confirm('Apakah Anda yakin ingin menghapus data ini?')) {
           axios.delete(url, this.headerConfig())
           .then(response => {
             // jika proses hapus data berhasil, memanggil data yang terbaru
-            this.getPegawai();
+            this.getMurid();
           })
           .catch(error => {
             console.log(error);
           });
         }
     }
+
     render(){
         return(
             <>
                 <NavBar />
                 <Card>
-                <Card.Header className="card-header bg-info text-white" align={'center'}>Data Pegawai</Card.Header>
+                <Card.Header className="card-header bg-info text-white" align={'center'}>Data Murid</Card.Header>
                 <Card.Body>
-                <input type="text" className="form-control mb-2" name="search" value={this.state.search} onChange={this.bind} onKeyUp={this.findPegawai} placeholder="Pencarian..." />
+               
+                <input type="text" className="form-control mb-2" name="search" value={this.state.search} onChange={this.bind} onKeyUp={this.findMurid} placeholder="Pencarian..." />
                 <Button variant="success" onClick={this.handleAdd}>
                     Tambah Data
                 </Button>
@@ -152,24 +166,30 @@ class Pegawai extends React.Component {
                     <thead>
                         <tr>
                             <th>ID</th>  
+                            <th>Nis</th>
                             <th>Nama</th>  
-                            <th>Alamat</th>  
+                            <th>Kelas</th>
+                            <th>jurusan</th>
+                            <th>Poin</th>  
                             <th>Option</th>
                         </tr>
                     </thead>
                     <tbody>
-                    {this.state.pegawai.map((item,index) => {  
+                    {this.state.murid.map((item,index) => {  
                         return (  
                         <tr key={index}>  
-                            <td>{item.id_pegawai}</td>  
-                            <td>{item.nama_pegawai}</td>  
-                            <td>{item.alamat}</td>  
+                            <td>{item.id_murid}</td>  
+                            <td>{item.nis_murid}</td>  
+                            <td>{item.nama_murid}</td>
+                            <td>{item.kelas}</td>
+                            <td>{item.jurusan}</td>
+                            <td>{item.poin}</td>
                             <td>  
                             <Button className="btn btn-sm btn-info m-1" data-toggle="modal"  
                             data-target="#modal" onClick={() => this.handleEdit(item)}>  
                                 Edit  
                             </Button>  
-                            <Button className="btn btn-sm btn-danger m-1" onClick={() => this.Drop(item.id_pegawai)}>  
+                            <Button className="btn btn-sm btn-danger m-1" onClick={() => this.Drop(item.id_murid)}>  
                                 Hapus  
                             </Button>  
                             </td>  
@@ -178,23 +198,34 @@ class Pegawai extends React.Component {
                     })}
                     </tbody>
                     </Table>
+                    <div><center><h6>Jurusan 1 = Rekayasa Perangkat Lunak<br></br>
+Jurusan 2 = Teknik Komputer Jaringan</h6></center></div>
                 </Card.Body>
                 </Card>
 
                 <Modal show={this.state.isModalOpen} onHide={this.handleClose }>
                     <Modal.Header closeButton>
-                    <Modal.Title>Form Pegawai</Modal.Title>
+                    <Modal.Title>Form Murid</Modal.Title>
                     </Modal.Header>
                     <Form onSubmit={this.handleSave}>
                         <Modal.Body>
                             ID  
-                            <input type="number" name="id_pegawai" value={this.state.id_pegawai} onChange={this.bind}  
+                            <input type="number" name="id_murid" value={this.state.id_murid} onChange={this.bind}  
+                            className="form-control" required />  
+                            Nis  
+                            <input type="text" name="nis_murid" value={this.state.nis_murid} onChange={this.bind}  
                             className="form-control" required />  
                             Nama  
-                            <input type="text" name="nama_pegawai" value={this.state.nama_pegawai} onChange={this.bind}  
-                            className="form-control" required />  
-                            Alamat  
-                            <input type="text" name="alamat" value={this.state.alamat} onChange={this.bind}  
+                            <input type="text" name="nama_murid" value={this.state.nama_murid} onChange={this.bind}  
+                            className="form-control" required />
+                            Kelas  
+                            <input type="text" name="kelas" value={this.state.kelas} onChange={this.bind}  
+                            className="form-control" required />
+                            jurusan
+                            <input type="number" name="jurusan" value={this.state.jurusan} onChange={this.bind}  
+                            className="form-control" required />
+                            Poin  
+                            <input type="text" name="poin" value={this.state.poin} onChange={this.bind}  
                             className="form-control" required />
                         </Modal.Body>
                         <Modal.Footer>
@@ -209,4 +240,4 @@ class Pegawai extends React.Component {
     }
 }
 
-export default Pegawai
+export default Murid

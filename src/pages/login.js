@@ -1,9 +1,8 @@
 import React from 'react'
 import axios from 'axios'
 import {Card, Form, Button, Container} from 'react-bootstrap'
-import {Navbar, Nav} from 'react-bootstrap'
+import {Nav} from 'react-bootstrap'
 import {Link} from 'react-router-dom'
-import Register from './register'
 
 class Login extends React.Component {
     constructor () {
