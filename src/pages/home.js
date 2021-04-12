@@ -81,7 +81,7 @@ class Home extends React.Component{
                         {/* pegawai count */}
                         <div className="col-lg-4 col-md-6 col-sm-12 mt-2">
                             <div className="card">
-                                <div className="card-body bg-success">
+                                <div className="card-body bg-info">
                                     <h4 className="text-dark">
                                         <strong>Jumlah Pegawai</strong>
                                     </h4>
@@ -93,7 +93,7 @@ class Home extends React.Component{
                         </div>
                         <div className="col-lg-4 col-md-6 col-sm-12 mt-2">
                             <div className="card">
-                                <div className="card-body bg-success">
+                                <div className="card-body bg-warning">
                                     <h4 className="text-dark">
                                         <strong>Jumlah Murid</strong>
                                     </h4>
@@ -105,7 +105,7 @@ class Home extends React.Component{
                         </div>
                         <div className="col-lg-4 col-md-6 col-sm-12 mt-2">
                             <div className="card">
-                                <div className="card-body bg-success">
+                                <div className="card-body bg-danger">
                                     <h4 className="text-dark">
                                         <strong>Jumlah Pelanggaran</strong>
                                     </h4>

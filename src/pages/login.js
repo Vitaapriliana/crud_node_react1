@@ -31,7 +31,7 @@ class Login extends React.Component {
                 let token = response.data.token
                 localStorage.setItem("user", JSON.stringify(user))
                 localStorage.setItem("token", token)
-                this.props.history.push("/pegawai")
+                this.props.history.push("/")
             } else {
                 this.setState({message: response.data.message})
             }

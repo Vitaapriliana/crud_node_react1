@@ -8,6 +8,7 @@ class Murid extends React.Component {
         super();
         this.state = {
             murid: [],
+            jur: [],
             id_murid: "",  
             nis_murid: "",  
             nama_murid: "",
@@ -100,6 +101,20 @@ class Murid extends React.Component {
     componentDidMount(){
         // method yang pertama kali dipanggil pada saat load page
         this.getMurid()
+        this.getJurusan()
+    }
+
+    getJurusan = () => {
+      let url = "http://localhost:2000/murid/jurusan";
+      // mengakses api untuk mengambil data pegawai
+      axios.get(url, this.headerConfig())
+      .then(response => {
+        // mengisikan data dari respon API ke array pegawai
+        this.setState({jur: response.data.jurusan});
+      })
+      .catch(error => {
+        console.log(error);
+      });
     }
     handleSave = (event) => {
         event.preventDefault();
@@ -151,6 +166,7 @@ class Murid extends React.Component {
     }
 
     render(){
+      console.log(this.state.jur)
         return(
             <>
                 <NavBar />
@@ -182,7 +198,7 @@ class Murid extends React.Component {
                             <td>{item.nis_murid}</td>  
                             <td>{item.nama_murid}</td>
                             <td>{item.kelas}</td>
-                            <td>{item.jurusan}</td>
+                            <td>{item.nama_jurusan}</td>
                             <td>{item.poin}</td>
                             <td>  
                             <Button className="btn btn-sm btn-info m-1" data-toggle="modal"  
@@ -198,8 +214,7 @@ class Murid extends React.Component {
                     })}
                     </tbody>
                     </Table>
-                    <div><center><h6>Jurusan 1 = Rekayasa Perangkat Lunak<br></br>
-Jurusan 2 = Teknik Komputer Jaringan</h6></center></div>
+                   
                 </Card.Body>
                 </Card>
 
@@ -222,8 +237,10 @@ Jurusan 2 = Teknik Komputer Jaringan</h6></center></div>
                             <input type="text" name="kelas" value={this.state.kelas} onChange={this.bind}  
                             className="form-control" required />
                             jurusan
-                            <input type="number" name="jurusan" value={this.state.jurusan} onChange={this.bind}  
-                            className="form-control" required />
+                            <select name="jurusan" value={this.state.jurusan} onChange={this.bind} className="form-control" required>
+                    {this.state.jur.map((item)=> {  
+                    return ( <option value={item.id_jurusan}>{item.nama_jurusan}</option> )})}
+                    </select> 
                             Poin  
                             <input type="text" name="poin" value={this.state.poin} onChange={this.bind}  
                             className="form-control" required />

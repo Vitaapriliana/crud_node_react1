@@ -111,7 +111,7 @@ class Pelanggaran extends React.Component {
             // mengisikan data dari respon API ke array pelanggaran
             this.setState({pelanggaran: response.data.pelanggaran});
           })
-          .catch(error => {
+          .catch(error => { 
             console.log(error);
           });
         }

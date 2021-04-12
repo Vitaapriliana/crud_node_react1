@@ -7,6 +7,7 @@ import Login from './login'
 import Register from './register'
 import Pelanggaran from './pelanggaran'
 import Murid from './murid'
+import PelanggaranSiswa from './pelanggaran_siswa'
 
 const Pages = () => (
     <Switch>
@@ -16,6 +17,7 @@ const Pages = () => (
         <Route exact path='/' component={Home} />
         <Route path='/login' component={Login} />
         <Route path='/register' component={Register} />
+        <Route path='/pelanggaran_siswa' component={PelanggaranSiswa} />
 
     </Switch>
 )
